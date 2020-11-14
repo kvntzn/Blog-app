@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
 import { Context } from '../context/BlogContext';
+import { Entypo } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const IndexScreen = () => {
-    const { state, addBlogPost } = useContext(Context);
+const IndexScreen = ({ navigation }) => {
+    const { state, addBlogPost, deleteBlogPost } = useContext(Context);
 
     return (
         <View>
@@ -13,13 +15,38 @@ const IndexScreen = () => {
                 data={state}
                 keyExtractor={(blogPost) => blogPost.title}
                 renderItem={({ item }) => {
-                    return <Text>{item.title}</Text>
+                    return (
+                        <TouchableOpacity onPress={() => navigation.navigate('Show', { id: item.id })}>
+                            <View style={styles.container}>
+                                <Text style={styles.title}>{item.title} - {item.id}</Text>
+                                <TouchableOpacity onPress={() => deleteBlogPost(item.id)}>
+                                    <Entypo style={styles.icon} name="trash" color="black" />
+                                </TouchableOpacity>
+                            </View>
+                        </TouchableOpacity>
+                    )
                 }}
             />
         </View>
     );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingVertical: 20,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderRadius: 10,
+        margin: 5
+    },
+    title: {
+        fontSize: 18
+    },
+    icon: {
+        fontSize: 24
+    }
+});
 
 export default IndexScreen;
