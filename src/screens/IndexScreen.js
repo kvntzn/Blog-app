@@ -5,12 +5,11 @@ import { Entypo, Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const IndexScreen = ({ navigation }) => {
-    const { state, addBlogPost, deleteBlogPost } = useContext(Context);
+    const { state, deleteBlogPost } = useContext(Context);
 
     return (
         <View>
             <Text>Index Screen</Text>
-            <Button title="Add Post" onPress={addBlogPost} />
             <FlatList
                 data={state}
                 keyExtractor={(blogPost) => blogPost.title}
