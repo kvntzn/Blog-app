@@ -11,6 +11,10 @@ const blogReducer = (state, action) => {
                     content: action.payload.content
                 }
             ];
+        case 'edit_blogpost':
+            return state.map((blogPost) => {
+                return blogPost.id === action.payload.id ? action.payload : blogPost;
+            });
         case 'delete_blogpost':
             return state.filter((blogPost) => blogPost.id !== action.payload);
         default:
@@ -21,7 +25,10 @@ const blogReducer = (state, action) => {
 const addBlogPost = dispatch => {
     return (title, content, callback) => {
         dispatch({ type: 'add_blogpost', payload: { title, content } });
-        callback();
+
+        if (callback) {
+            callback();
+        }
     }
 };
 
@@ -31,9 +38,19 @@ const deleteBlogPost = dispatch => {
     }
 }
 
+const editBlogPost = dispatch => {
+    return (id, title, content, callback) => {
+        dispatch({ type: 'edit_blogpost', payload: { id, title, content } });
+
+        if (callback) {
+            callback();
+        }
+    }
+}
+
 
 export const { Context, Provider } = createDataContext(
     blogReducer,
-    { addBlogPost, deleteBlogPost },
-    [ { title: 'Test Post', content: 'Test content', id: 1}]
+    { addBlogPost, deleteBlogPost, editBlogPost },
+    [{ title: 'Test Post', content: 'Test content', id: 1 }]
 );
